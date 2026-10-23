@@ -1,14 +1,23 @@
-## Summary
+## 摘要
 
-- TBD
+- 改了什么：
+- 为什么：
 
-## Validation
+## 验证
 
-- [ ] `cmake --preset debug`
-- [ ] `cmake --build --preset debug`
-- [ ] `ctest --preset debug --output-on-failure`
-- [ ] Manual GUI check, if applicable
+- [ ] `./scripts/check.sh` 或 `./scripts/check.ps1`
+- [ ] 其他相关的 preset、冒烟或人工检查：
+- [ ] 未运行；原因：
 
-## Notes
+针对具体改动的验证指导见 `docs/guides/testing.md`。
 
-- TBD
+## 影响
+
+- 公共 API 影响：
+- 构建、CI、打包或发布影响：
+- 文档影响：
+
+## AI 辅助
+
+- [ ] 使用了 AI 辅助并已披露，包括已读文档和已运行的验证。
+- [ ] 未使用实质性的 AI 辅助。

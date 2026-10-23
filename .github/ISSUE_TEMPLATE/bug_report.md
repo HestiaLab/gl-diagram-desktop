@@ -1,30 +1,41 @@
 ---
-name: Bug report
-about: Report a reproducible problem
+name: Bug 报告
+about: 报告一个可复现的缺陷
+title: "bug: "
 labels: bug
+assignees: ""
 ---
 
-## Summary
+## 摘要
 
+描述该缺陷。
 
-## Steps To Reproduce
+## 复现
 
-1.
-2.
-3.
+1. TODO
 
-## Expected Behavior
+## 命令
 
+```sh
+TODO
+```
 
-## Actual Behavior
+## 实际行为
 
+描述发生了什么。
 
-## Environment
+## 预期行为
 
-- OS:
-- Compiler:
-- CMake version:
-- Graphics driver / OpenGL version:
+描述本应发生什么。
 
-## Additional Context
-TBD
+## 环境
+
+- 操作系统：
+- 编译器：
+- CMake 版本：
+- Generator 或 preset：
+- 项目 commit：
+
+## 补充信息
+
+附上日志、失败的测试或相关链接。
