@@ -2,10 +2,14 @@ name: CI
 
 on:
   push:
-    branches: [main, master, 'feature/**', 'fix/**', 'refactor/**', 'infra/**']
+    branches: [main, master]
   pull_request:
     branches: [main, master]
   workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -26,11 +30,20 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Cache apt packages
+        if: runner.os == 'Linux'
+        uses: actions/cache@v4
+        with:
+          path: .cache/apt/archives
+          key: apt-${{ runner.os }}-v1
+          restore-keys: apt-${{ runner.os }}-
+
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
+          mkdir -p .cache/apt/archives/partial
           sudo apt-get update
-          sudo apt-get install -y \
+          sudo apt-get -o Dir::Cache::archives="$PWD/.cache/apt/archives" install -y \
             build-essential \
             cmake \
             ninja-build \
@@ -53,8 +66,21 @@ jobs:
           echo "CC=clang" >> "$GITHUB_ENV"
           echo "CXX=clang++" >> "$GITHUB_ENV"
 
+      - name: Cache GLFW source
+        id: glfw-cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/glfw
+          key: glfw-3.3.9-${{ hashFiles('cmake/Dependencies.cmake') }}
+
+      - name: Fetch GLFW source on cache miss
+        if: steps.glfw-cache.outputs.cache-hit != 'true'
+        run: git clone --depth 1 --branch 3.3.9 https://github.com/glfw/glfw.git .cache/glfw
+
       - name: Configure
-        run: cmake --preset ${{ matrix.preset }}
+        run: >
+          cmake --preset ${{ matrix.preset }}
+          -DFETCHCONTENT_SOURCE_DIR_GLFW="${{ github.workspace }}/.cache/glfw"
 
       - name: Build
         run: cmake --build --preset ${{ matrix.preset }}
@@ -72,11 +98,20 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Cache apt packages
+        if: runner.os == 'Linux'
+        uses: actions/cache@v4
+        with:
+          path: .cache/apt/archives
+          key: apt-${{ runner.os }}-v1
+          restore-keys: apt-${{ runner.os }}-
+
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
+          mkdir -p .cache/apt/archives/partial
           sudo apt-get update
-          sudo apt-get install -y \
+          sudo apt-get -o Dir::Cache::archives="$PWD/.cache/apt/archives" install -y \
             build-essential \
             cmake \
             ninja-build \
@@ -89,8 +124,21 @@ jobs:
       - name: Set up Ninja
         uses: seanmiddleditch/gha-setup-ninja@v6
 
+      - name: Cache GLFW source
+        id: glfw-cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/glfw
+          key: glfw-3.3.9-${{ hashFiles('cmake/Dependencies.cmake') }}
+
+      - name: Fetch GLFW source on cache miss
+        if: steps.glfw-cache.outputs.cache-hit != 'true'
+        run: git clone --depth 1 --branch 3.3.9 https://github.com/glfw/glfw.git .cache/glfw
+
       - name: Configure
-        run: cmake --preset ninja-asan
+        run: >
+          cmake --preset ninja-asan
+          -DFETCHCONTENT_SOURCE_DIR_GLFW="${{ github.workspace }}/.cache/glfw"
 
       - name: Build
         run: cmake --build --preset ninja-asan
@@ -108,11 +156,20 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Cache apt packages
+        if: runner.os == 'Linux'
+        uses: actions/cache@v4
+        with:
+          path: .cache/apt/archives
+          key: apt-${{ runner.os }}-v1
+          restore-keys: apt-${{ runner.os }}-
+
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
+          mkdir -p .cache/apt/archives/partial
           sudo apt-get update
-          sudo apt-get install -y \
+          sudo apt-get -o Dir::Cache::archives="$PWD/.cache/apt/archives" install -y \
             build-essential \
             cmake \
             ninja-build \
@@ -125,8 +182,21 @@ jobs:
       - name: Set up Ninja
         uses: seanmiddleditch/gha-setup-ninja@v6
 
+      - name: Cache GLFW source
+        id: glfw-cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/glfw
+          key: glfw-3.3.9-${{ hashFiles('cmake/Dependencies.cmake') }}
+
+      - name: Fetch GLFW source on cache miss
+        if: steps.glfw-cache.outputs.cache-hit != 'true'
+        run: git clone --depth 1 --branch 3.3.9 https://github.com/glfw/glfw.git .cache/glfw
+
       - name: Configure
-        run: cmake --preset ninja-coverage
+        run: >
+          cmake --preset ninja-coverage
+          -DFETCHCONTENT_SOURCE_DIR_GLFW="${{ github.workspace }}/.cache/glfw"
 
       - name: Build
         run: cmake --build --preset ninja-coverage
@@ -144,11 +214,20 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Cache apt packages
+        if: runner.os == 'Linux'
+        uses: actions/cache@v4
+        with:
+          path: .cache/apt/archives
+          key: apt-${{ runner.os }}-v1
+          restore-keys: apt-${{ runner.os }}-
+
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
+          mkdir -p .cache/apt/archives/partial
           sudo apt-get update
-          sudo apt-get install -y \
+          sudo apt-get -o Dir::Cache::archives="$PWD/.cache/apt/archives" install -y \
             build-essential \
             cmake \
             ninja-build \
@@ -165,8 +244,21 @@ jobs:
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
 
+      - name: Cache GLFW source
+        id: glfw-cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/glfw
+          key: glfw-3.3.9-${{ hashFiles('cmake/Dependencies.cmake') }}
+
+      - name: Fetch GLFW source on cache miss
+        if: steps.glfw-cache.outputs.cache-hit != 'true'
+        run: git clone --depth 1 --branch 3.3.9 https://github.com/glfw/glfw.git .cache/glfw
+
       - name: Configure release build
-        run: cmake --preset ninja-release
+        run: >
+          cmake --preset ninja-release
+          -DFETCHCONTENT_SOURCE_DIR_GLFW="${{ github.workspace }}/.cache/glfw"
 
       - name: Build release
         run: cmake --build --preset ninja-release
