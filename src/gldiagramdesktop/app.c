@@ -137,6 +137,7 @@ int gldiagramdesktop_run(void) {
 
             if (nk_button_label(ctx, "点击我")) {
                 printf("按钮已点击\n");
+                (void)fflush(stdout);
             }
         }
 
