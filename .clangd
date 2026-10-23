@@ -4,7 +4,7 @@ CompileFlags:
     - -Iinclude
     - -Isrc
     - -Ibuild/ninja-debug/generated/include
+    - -Ithird_party
     - -Ithird_party/glad/include
-    - -Ithird_party/KHR
     - -Ithird_party/nuklear/include
     - -std=c11

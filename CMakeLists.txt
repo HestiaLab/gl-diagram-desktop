@@ -45,8 +45,8 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/Dependencies.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/Sources.cmake")
 
 set(GLDIAGRAMDESKTOP_THIRD_PARTY_INCLUDE_DIRS
+    "${CMAKE_CURRENT_SOURCE_DIR}/third_party"
     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/third_party/KHR"
     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/nuklear/include"
 )
 
