@@ -5,11 +5,11 @@
 
 static void print_usage(FILE *stream, const char *program) {
     fprintf(stream,
-            "Usage: %s [options]\n"
+            "用法：%s [选项]\n"
             "\n"
-            "Options:\n"
-            "  -h, --help     Show this help\n"
-            "  -v, --version  Show version\n",
+            "选项：\n"
+            "  -h, --help     显示本帮助\n"
+            "  -v, --version  显示版本号\n",
             program);
 }
 
@@ -23,10 +23,10 @@ int main(int argc, char **argv) {
             return 0;
         }
         if (strcmp(arg, "-v") == 0 || strcmp(arg, "--version") == 0) {
-            printf("%s %s\n", "gldiagramdesktop", gldiagramdesktop_version());
+            printf("gldiagramdesktop %s\n", gldiagramdesktop_version());
             return 0;
         }
-        fprintf(stderr, "Unknown option: %s\n", arg);
+        fprintf(stderr, "未知选项：%s\n", arg);
         print_usage(stderr, program);
         return 2;
     }

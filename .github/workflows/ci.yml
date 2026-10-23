@@ -183,6 +183,8 @@ jobs:
           else
             test -x install/bin/gldiagramdesktop
           fi
+          test -f install/bin/fonts/NotoSansSC-Regular.ttf
+          test -f install/bin/fonts/OFL.txt
           test -f install/share/doc/GlDiagramDesktop/README.md
 
       - name: Smoke run version flag

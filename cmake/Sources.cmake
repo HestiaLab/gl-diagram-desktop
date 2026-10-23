@@ -5,6 +5,7 @@
 set(GLDIAGRAMDESKTOP_APP_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/gldiagramdesktop/app.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/gldiagramdesktop/platform.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/gldiagramdesktop/version.c
 )
 
