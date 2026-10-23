@@ -1,22 +1,36 @@
 ---
-name: Infrastructure
-about: Build, CI, dependency, or tooling maintenance
+name: 基础设施请求
+about: 提议构建、CI、打包、测试或工具链维护
+title: "infra: "
 labels: infrastructure
+assignees: ""
 ---
 
-## Area
+## 范围
 
-- [ ] Build
+描述构建、CI、打包、测试或工具链的改动。
+
+## 受影响区域
+
+- [ ] 构建
 - [ ] CI
-- [ ] Dependencies
-- [ ] Tooling
-- [ ] Documentation
+- [ ] 打包
+- [ ] 测试
+- [ ] 文档
+- [ ] 依赖
 
-## Summary
+## 动机
 
+描述维护风险、工作流缺口或模板质量问题。
 
-## Proposed Change
+## 验证
 
+列出应能证明改动有效的检查。
 
-## Validation
-TBD
+## 风险与回滚
+
+描述风险、兼容性顾虑或回滚路径。
+
+## 兼容性
+
+描述对受支持平台、本地工具或下游用户的任何影响。

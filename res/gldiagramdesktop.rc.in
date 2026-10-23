@@ -1,0 +1,31 @@
+#pragma code_page(65001)
+#include <winver.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     @GLDIAGRAMDESKTOP_VERSION_MAJOR@,@GLDIAGRAMDESKTOP_VERSION_MINOR@,@GLDIAGRAMDESKTOP_VERSION_PATCH@,0
+PRODUCTVERSION  @GLDIAGRAMDESKTOP_VERSION_MAJOR@,@GLDIAGRAMDESKTOP_VERSION_MINOR@,@GLDIAGRAMDESKTOP_VERSION_PATCH@,0
+FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+FILEFLAGS       0
+FILEOS          VOS_NT_WINDOWS32
+FILETYPE        VFT_APP
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404B0"
+        BEGIN
+            VALUE "CompanyName", "GlDiagramDesktop contributors"
+            VALUE "FileDescription", "基于 OpenGL 3.3 与 Nuklear 的绘图桌面应用"
+            VALUE "FileVersion", "@PROJECT_VERSION@"
+            VALUE "InternalName", "gldiagramdesktop"
+            VALUE "LegalCopyright", "Copyright (c) 2026 GlDiagramDesktop contributors"
+            VALUE "OriginalFilename", "gldiagramdesktop.exe"
+            VALUE "ProductName", "GlDiagramDesktop"
+            VALUE "ProductVersion", "@PROJECT_VERSION@"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0804, 1200
+    END
+END

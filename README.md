@@ -1,117 +1,114 @@
-# GLDiagram
+# GlDiagramDesktop
 
-GLDiagram is a C11 OpenGL 3.3 drawing canvas with a Nuklear immediate-mode GUI.
-The repository has been shaped to follow the local `c-project-standard`
-template: modular CMake, presets, CTest, local check scripts, CI, and short
-maintenance documentation.
+基于 OpenGL 3.3 与 Nuklear 即时模式 GUI 的绘图桌面应用。仓库名与远程地址为
+`gl-diagram-desktop`，构建产物与公共头目录使用 `gldiagramdesktop` 命名空间。
 
-## Quick Start
+本项目只提供中文文档与中文界面，不再维护英文版本。
 
-```sh
-cmake --preset debug
-cmake --build --preset debug
-ctest --preset debug --output-on-failure
+## 快速开始
+
+首次检出先运行 bootstrap，它会检查工具链并完成一次 configure：
+
+**Windows PowerShell**
+
+```powershell
+./scripts/bootstrap.ps1
 ```
 
-Run the application after building:
+**Linux/macOS**
 
 ```sh
-./build/debug/bin/GLDiagram
+./scripts/bootstrap.sh
 ```
 
-On Windows PowerShell:
+日常检查与构建：
 
 ```powershell
 ./scripts/check.ps1
-.\build\debug\bin\GLDiagram.exe
 ```
-
-On Linux/macOS:
 
 ```sh
 ./scripts/check.sh
-./build/debug/bin/GLDiagram
 ```
 
-## Requirements
-
-- CMake 3.20 or newer
-- A C11-compatible compiler
-- OpenGL 3.3 capable graphics driver
-
-For step-by-step platform setup, see
-[doc/guides/environment.md](doc/guides/environment.md).
-
-Linux builds need OpenGL and X11 development packages. On Debian or Ubuntu:
+手动执行 CMake 命令：
 
 ```sh
-sudo apt-get install build-essential cmake libgl1-mesa-dev \
-  libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+cmake --preset ninja-debug
+cmake --build --preset ninja-debug
+ctest --preset ninja-debug --output-on-failure
 ```
 
-See [doc/guides/environment.md](doc/guides/environment.md) for other
-distributions and macOS.
-
-## Presets
-
-Available CMake presets:
-
-- `debug`
-- `release`
-- `asan`
-- `coverage`
-
-Common commands:
+运行应用：
 
 ```sh
-cmake --preset release
-cmake --build --preset release
-ctest --preset release --output-on-failure
+./build/ninja-debug/bin/gldiagramdesktop
 ```
 
-## Layout
+命令行参数：
 
 ```text
-include/        Public and vendored headers
-src/            Application source and isolated vendor implementation
-tests/          CTest test programs
-cmake/          CMake modules
-scripts/        Local check entry points
-doc/            Contributor documentation
-doc/guides/     Topic guides
-.github/        CI, issue, and PR templates
+-h, --help     显示帮助
+-v, --version  显示版本号
 ```
 
-Project-owned public headers belong under `include/gldiagram/`. GLAD, KHR, and
-Nuklear headers keep their upstream include namespaces.
+## 环境要求
 
-## Dependencies
+- CMake 3.21 或更高版本。
+- Ninja（默认 preset）与 C11 编译器（MSVC、GCC、Clang、AppleClang）。
+- 支持 OpenGL 3.3 的显卡驱动。
+- 首次配置需要网络：GLFW 3.3.9 通过 FetchContent 获取；离线环境可用
+  `FETCHCONTENT_SOURCE_DIR_GLFW` 指向本地 GLFW 源码。
 
-- GLFW 3.3.9 is fetched by CMake with `FetchContent`.
-- OpenGL is discovered with `find_package(OpenGL REQUIRED)`.
-- GLAD is vendored as generated source/header files.
-- Nuklear is vendored as single-header source and GLFW backend header.
+Linux 还需要 OpenGL 与 X11 开发包，macOS 需要 Xcode Command Line Tools。
+详见 [环境配置](docs/guides/environment.md)。
 
-GLAD can be regenerated with:
+## 项目结构
+
+```text
+include/gldiagramdesktop/   公共 API（应用入口与版本查询）
+src/                        应用实现
+src/gldiagramdesktop/       私有实现与平台适配
+third_party/                vendored GLAD、KHR、Nuklear（不参与项目警告）
+tests/                      CTest 测试（Unity）
+cmake/                      CMake 模块
+scripts/                    本地引导、检查与质量门禁脚本
+docs/                       中文项目文档
+res/                        Windows 版本资源与界面字体
+```
+
+## 界面字体
+
+界面使用随包分发的 Noto Sans SC Regular（SIL OFL 1.1），启动时按 CJK 基本区
+烘焙图集。字体位于可执行文件同级的 `fonts/` 目录；可用
+`GLDIAGRAMDESKTOP_FONT` 环境变量指定其他字体文件。字体来源与再生成方式见
+[res/fonts/README.md](res/fonts/README.md)。
+
+## 安装
 
 ```sh
-glad --generator=c --profile=compatibility --api=gl:3.3 --out-path=include/glad/
+cmake --preset ninja-release
+cmake --build --preset ninja-release
+cmake --install build/ninja-release --prefix install
 ```
 
-## Documentation Map
+安装内容包括可执行文件、`bin/fonts/` 下的界面字体与文档。本项目是纯应用，
+不导出库或 CMake 包。
 
-- [doc/README.md](doc/README.md) — full documentation index.
-- [doc/guides/environment.md](doc/guides/environment.md) — platform prerequisites and tool installation.
-- [doc/cmake-guide.md](doc/cmake-guide.md) explains day-to-day CMake usage.
-- [doc/build.md](doc/build.md) lists supported presets, options, and commands.
-- [doc/testing.md](doc/testing.md) describes automated and manual checks.
-- [doc/release.md](doc/release.md) describes release preparation.
-- [doc/template.md](doc/template.md) records how the C template was applied.
-- [doc/guides/ai-agent.md](doc/guides/ai-agent.md) — AI agent policy (redirects to AGENTS.md).
-- [CONTRIBUTING.md](CONTRIBUTING.md) describes contribution workflow.
-- [SECURITY.md](SECURITY.md) describes vulnerability and dependency handling.
-- [C_PROJECT_STANDARD.md](C_PROJECT_STANDARD.md) defines the local project standard.
+## 文档
 
-## License
+- [CMake 与构建](docs/guides/cmake.md)
+- [测试与质量门禁](docs/guides/testing.md)
+- [编码规范](docs/guides/coding-style.md)
+- [环境配置](docs/guides/environment.md)
+- [发布流程](docs/guides/release.md)
+- [架构决策记录](docs/adr/README.md)
+- [工具链策略 ADR](docs/adr/0001-c11-cmake-toolchain-policy.md)
+- [应用型适配 ADR](docs/adr/0002-application-shape.md)
+- [工程标准](C_PROJECT_STANDARD.md)
+- [贡献指南](CONTRIBUTING.md)
+- [安全策略](SECURITY.md)
 
-MIT License. See [LICENSE.txt](LICENSE.txt).
+## 许可证
+
+MIT，见 [LICENSE](LICENSE)。界面字体另受 SIL Open Font License 1.1 约束。

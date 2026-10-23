@@ -1,18 +1,31 @@
 ---
-name: Feature request
-about: Propose a focused feature
+name: 功能请求
+about: 提议一个面向用户的能力
+title: "feat: "
 labels: enhancement
+assignees: ""
 ---
 
-## Problem
+## 问题
 
+描述这将解决的用户或维护者问题。
 
-## Proposal
+## 提议
 
+描述你期望的行为或 API。
 
-## Alternatives Considered
+## 范围
 
+描述包含什么、有意排除什么。
 
-## Validation
+## 验收标准
 
-How should this be tested or manually verified?
+- TODO
+
+## 备选方案
+
+描述考虑过的备选方案，或为什么这不应该留在范围之外。
+
+## 兼容性
+
+描述预期的 API、构建、打包或文档影响。
