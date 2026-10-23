@@ -1,3 +1,8 @@
+#if defined(__linux__) && !defined(_POSIX_C_SOURCE)
+/* 严格 C11 下 glibc 会隐藏 readlink 的声明。 */
+#define _POSIX_C_SOURCE 200809L
+#endif
+
 #include "platform.h"
 
 #include <stdint.h>
