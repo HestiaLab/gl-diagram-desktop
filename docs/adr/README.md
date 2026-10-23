@@ -23,3 +23,4 @@ CI 预期时，创建一条 ADR。不要为常规实现细节或一次性 bug �
 ## 记录
 
 - [0001 C11 与 CMake 工具链策略](0001-c11-cmake-toolchain-policy.md)
+- [0002 应用型项目适配](0002-application-shape.md)

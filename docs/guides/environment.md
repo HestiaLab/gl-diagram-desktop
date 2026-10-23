@@ -19,6 +19,41 @@ Linux 与 macOS 使用系统包管理器安装 CMake、Ninja 与 GCC/Clang 即�
 | clang-format | 否 | 本地格式化检查 |
 | clang-tidy | 否 | 可选的本地静态分析 |
 
+## 图形与字体依赖
+
+- **Windows**：无需额外 SDK，安装支持 OpenGL 3.3 的显卡驱动即可。
+- **Ubuntu/Debian**：
+
+  ```sh
+  sudo apt-get install -y \
+    libgl1-mesa-dev \
+    libxrandr-dev \
+    libxinerama-dev \
+    libxcursor-dev \
+    libxi-dev
+  ```
+
+- **Fedora**：
+
+  ```sh
+  sudo dnf install -y \
+    mesa-libGL-devel \
+    libXrandr-devel \
+    libXinerama-devel \
+    libXcursor-devel \
+    libXi-devel
+  ```
+
+- **macOS**：`xcode-select --install` 提供编译工具与 OpenGL 框架头文件。
+
+GLFW 3.3.9 由 CMake 通过 FetchContent 获取，首次 configure 需要网络；离线时可把
+`FETCHCONTENT_SOURCE_DIR_GLFW` 指向本地源码。
+
+界面字体（Noto Sans SC）随程序分发，不需要在系统中安装中文字体。自定义字体时
+设置 `GLDIAGRAMDESKTOP_FONT` 指向字体文件。
+
+GLFW 3.3.9 默认使用 X11；Wayland-only 环境需要 XWayland。
+
 ## 安装步骤
 
 按以下顺序安装。安装路径尽量不含空格和非 ASCII 字符。

@@ -54,6 +54,16 @@
 
 关于配置、构建、测试、安装、预设和常见 CMake 故障的详细说明，参见 [docs/guides/cmake.md](docs/guides/cmake.md)。
 
+## 项目特有约定
+
+- 本仓库只接受中文文案与中文文档；不要新增英文 README 或双语镜像。
+- `third_party/` 只允许在依赖维护提交中修改，并同步更新
+  [third_party/README.md](third_party/README.md) 的版本与许可证记录。
+- 修改 `res/fonts/` 中的字体时，必须更新 [res/fonts/README.md](res/fonts/README.md)
+  中的来源、再生成命令与 SHA-256。
+- 涉及窗口、字体或渲染的改动，需要在 PR 中记录手动 GUI 冒烟结果。
+- 不要为了让检查通过而放宽警告、测试、静态分析或 CI。
+
 ## 分支
 
 使用短分支名：
@@ -69,9 +79,9 @@
 尽量使用 Conventional Commit 风格：
 
 ```text
-fix(parser): reject invalid delimiters
-feat(cli): add version command
-refactor(build): share test target helper
+fix(font): 修复缺字时的回退字形
+feat(app): 增加画布缩放
+refactor(build): 精简测试辅助函数
 ```
 
 打开 PR 前：

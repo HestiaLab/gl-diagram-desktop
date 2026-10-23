@@ -8,6 +8,16 @@
 
 默认策略是支持当前 `main` 分支，除非项目发布带独立支持表的版本化 release。
 
+## 依赖
+
+- GLFW 3.3.9 通过 FetchContent 固定版本获取。
+- GLAD、KHR 与 Nuklear 以 vendored 形式存放，版本记录在
+  [third_party/README.md](third_party/README.md)。
+- 界面字体为 Noto Sans SC（SIL OFL 1.1），见
+  [res/fonts/OFL.txt](res/fonts/OFL.txt)。
+
+依赖升级应单独提交，并在 PR 中说明安全影响与验证结果。
+
 ## 依赖处理
 
 - 优先选择小而维护良好的依赖。
