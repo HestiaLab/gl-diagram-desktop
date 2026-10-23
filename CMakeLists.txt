@@ -105,6 +105,8 @@ if(GLDIAGRAMDESKTOP_BUILD_APP)
     endif()
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         target_link_libraries(gldiagramdesktop PRIVATE dl pthread)
+        # 严格 C11 下 glibc 会隐藏 readlink 的声明。
+        target_compile_definitions(gldiagramdesktop PRIVATE _POSIX_C_SOURCE=200809L)
     endif()
 
     gldiagramdesktop_target_defaults(gldiagramdesktop)
