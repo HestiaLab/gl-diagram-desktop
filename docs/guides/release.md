@@ -64,3 +64,21 @@ git push origin v0.1.0
 
 标签必须打在干净、通过 CI 的 `main` 提交上。未经维护者同意，不要发布由 AI
 辅助完成的改动。
+
+## 发布制品
+
+`.github/workflows/release.yml` 在推送 `v*` 标签或手动触发时，从标签源码构建
+三平台产物并上传到对应 GitHub Release：
+
+- `gldiagramdesktop-<version>-linux-x86_64.tar.gz`
+- `gldiagramdesktop-<version>-macos-arm64.zip`
+- `gldiagramdesktop-<version>-windows-x64.zip`
+
+每个产物包含可执行文件、`fonts/` 界面字体与文档。为已存在的 Release 补产物：
+
+```sh
+gh workflow run release.yml --ref main -f tag=v0.1.0
+```
+
+发布说明应注明各平台的运行依赖（Linux 需要 OpenGL/X11 运行库；macOS 产物未签名，
+首次运行可能需要在系统设置中允许）。

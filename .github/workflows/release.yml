@@ -1,0 +1,117 @@
+name: Release artifacts
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "要构建并上传产物的 tag"
+        required: true
+        default: "v0.1.0"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-x86_64
+            archive: tar.gz
+          - os: macos-latest
+            platform: macos-arm64
+            archive: zip
+          - os: windows-latest
+            platform: windows-x64
+            archive: zip
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.ref_name }}
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            ninja-build \
+            libgl1-mesa-dev \
+            libxrandr-dev \
+            libxinerama-dev \
+            libxcursor-dev \
+            libxi-dev
+
+      - name: Set up Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v6
+
+      - name: Set up MSVC
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure release
+        run: cmake --preset ninja-release
+
+      - name: Build release
+        run: cmake --build --preset ninja-release
+
+      - name: Test release
+        run: ctest --preset ninja-release --output-on-failure
+
+      - name: Stage install
+        run: cmake --install build/ninja-release --config Release --prefix package
+
+      - name: Package archive
+        shell: bash
+        run: |
+          set -eu
+          TAG="${{ inputs.tag || github.ref_name }}"
+          VERSION="${TAG#v}"
+          NAME="gldiagramdesktop-${VERSION}-${{ matrix.platform }}"
+          mkdir -p dist
+          cp -R package "dist/${NAME}"
+          cd dist
+          if [ "${{ matrix.archive }}" = "zip" ]; then
+            cmake -E tar cf "${NAME}.zip" --format=zip "${NAME}"
+          else
+            cmake -E tar czf "${NAME}.tar.gz" --format=gnutar "${NAME}"
+          fi
+          ls -lh
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-${{ matrix.platform }}
+          path: |
+            dist/*.zip
+            dist/*.tar.gz
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Upload to GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          set -eu
+          if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes
+          fi
+          gh release upload "$TAG" artifacts/* --repo "$GITHUB_REPOSITORY" --clobber
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,assets --jq '{url: .url, assets: [.assets[].name]}'
